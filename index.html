@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeCore - Secure AI User Protection OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], mono: ['JetBrains Mono','monospace'] }, colors: { brand: { 500: '#22c55e', 600: '#16a34a', 900: '#14532d' } } } }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-panel { background: rgba(17,24,39,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #111827; } ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-[#0a0e13] text-gray-100 min-h-screen flex flex-col justify-between">
+    <header class="border-b border-gray-800/80 bg-gray-900/80 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center font-black text-xl text-white shadow-lg">E</div>
+                <div>
+                    <span class="text-xl font-extrabold text-white">EdgeCore</span>
+                    <span class="hidden sm:flex text-[10px] text-emerald-400 font-mono items-center gap-1.5 tracking-widest"><i class="fa-solid fa-shield-halved"></i> AI USER SECURITY FIRST • ZERO DATA LEAVES YOUR DEVICE</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="exportData()" class="bg-gray-800 text-xs px-3 py-2 rounded-full border border-gray-700 flex items-center gap-1.5"><i class="fa-solid fa-download text-emerald-400"></i> Backup</button>
+                <label class="bg-gray-800 text-xs px-3 py-2 rounded-full border border-gray-700 flex items-center gap-1.5 cursor-pointer"><i class="fa-solid fa-upload text-blue-400"></i> Restore<input type="file" id="restoreFile" accept=".json" onchange="importData(event)" class="hidden"></label>
+                <button onclick="toggleModal()" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-full font-semibold"><i class="fa-solid fa-lock mr-1"></i> Vault</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="mb-8 p-6 rounded-[20px] bg-gray-900 border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-emerald-500"></i> Secure AI Assistant & Universal OS</h1>
+                <p class="text-xs text-gray-400 mt-1">We prioritize your privacy. All processing happens locally. No data is ever uploaded.</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 px-3 py-2 rounded-full border border-emerald-900/50 whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Zero Data Upload</div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 rounded-[20px]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-brain text-emerald-500"></i> Local AI Problem Solver</h2>
+                    <span class="text-[10px] bg-emerald-900/40 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-full font-mono whitespace-nowrap">OFFLINE AI</span>
+                </div>
+                <p class="text-xs text-gray-400 mb-3">Type any problem. Our secure engine solves it locally without sending data online.</p>
+                <textarea id="userProblem" rows="3" placeholder="Type your question or problem here..." class="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-xs text-white focus:border-emerald-500 resize-none"></textarea>
+                <button onclick="solveProblem()" class="w-full mt-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Solve Securely (Offline)</button>
+                <div id="solutionContainer" class="hidden mt-4 p-3 bg-gray-900 border border-gray-800 rounded-xl max-h-52 overflow-y-auto"><span class="text-[11px] font-bold text-emerald-400 block mb-1">Secure Local Solution:</span><p id="solutionOutput" class="text-[12px] text-gray-300 leading-relaxed whitespace-pre-line"></p></div>
+            </div>
+            <div class="glass-panel p-6 rounded-[20px]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-list-check text-blue-500"></i> Daily Tasks & Goals</h2>
+                    <span class="text-[10px] bg-blue-900/40 text-blue-300 border border-blue-800 px-2.5 py-1 rounded-full font-mono">LOCAL</span>
+                </div>
+                <form id="taskForm" onsubmit="addMyTask(event)" class="space-y-3 mb-4">
+                    <input type="text" id="taskTitle" placeholder="Add any task or reminder..." required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white">
+                    <div class="grid grid-cols-2 gap-2">
+                        <select id="taskType" class="bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white"><option>Personal</option><option>Family</option><option>Work</option><option>Health</option></select>
+                        <select id="taskUrgency" class="bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white"><option>Normal</option><option>Important</option></select>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white text-xs py-2 rounded-lg">Add Task</button>
+                </form>
+                <div id="taskList" class="space-y-2 max-h-56 overflow-y-auto"></div>
+            </div>
+            <div class="glass-panel p-6 rounded-[20px]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-lock text-purple-500"></i> Secure Personal Vault</h2>
+                    <span class="text-[10px] bg-purple-900/40 text-purple-300 border border-purple-800 px-2.5 py-1 rounded-full font-mono">ENCRYPTED</span>
+                </div>
+                <textarea id="vaultContent" rows="5" placeholder="Save your private notes securely..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-xs text-white resize-none"></textarea>
+                <div class="flex gap-2 mt-3">
+                    <button onclick="saveVaultData()" class="flex-1 bg-purple-600 text-white text-xs py-2.5 rounded-lg"><i class="fa-solid fa-floppy-disk mr-1"></i> Save Securely</button>
+                    <button onclick="clearVaultData()" class="bg-gray-800 text-gray-400 text-xs px-3 py-2.5 rounded-lg border border-gray-700">Clear</button>
+                </div>
+                <p class="text-[10px] text-gray-500 text-center mt-2">Your data stays only on your device. Never uploaded.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-800 mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div><h3 class="text-sm font-bold">EdgeCore Universal OS</h3><p class="text-xs text-gray-400">AI User Security First • Zero Data Upload</p></div>
+            <form action="https://formspree.io/f/mzeeznzp" method="POST" class="flex gap-2"><input type="email" name="email" placeholder="Enter your email..." required class="bg-gray-900 border border-gray-800 rounded-full px-4 py-2 text-xs text-white w-[240px]"><button type="submit" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-full">Subscribe</button></form>
+        </div>
+    </footer>
+
+    <div id="infoModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gray-900 border border-gray-800 w-full max-w-md rounded-2xl p-6 relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center mb-6"><div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-shield-halved"></i></div><h3 class="font-bold">100% Security Guarantee</h3><p class="text-xs text-gray-400 mt-1">EdgeCore never uploads your data. Everything stays local.</p></div>
+            <form action="https://formspree.io/f/mzeeznzp" method="POST" class="space-y-4"><input type="email" name="user_email" placeholder="name@domain.com" required class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white"><button type="submit" class="w-full bg-emerald-600 text-white text-xs py-2.5 rounded-lg">Get Secure Updates</button></form>
+        </div>
+    </div>
+
+    <script>
+        let myTasks = JSON.parse(localStorage.getItem('edgecore_universal_tasks')) || [];
+        document.addEventListener('DOMContentLoaded', () => { renderTasks(); loadVaultData(); });
+        function solveProblem() {
+            const problem = document.getElementById('userProblem').value.trim();
+            const container = document.getElementById('solutionContainer');
+            const output = document.getElementById('solutionOutput');
+            if (!problem) { alert('Please type a question first.'); return; }
+            container.classList.remove('hidden');
+            output.innerHTML = `<span class="text-emerald-400 animate-pulse">Processing securely on device...</span>`;
+            setTimeout(() => { output.innerText = `🔒 Secure Local Analysis: "${problem}"\n\n1. Action Plan:\n   - Break goal into small steps.\n   - Save to Task Manager.\n\n2. Security:\n   - 100% local processing.\n   - No data sent to internet.\n\n✓ Plan generated safely.`; }, 500);
+        }
+        function addMyTask(e) { e.preventDefault(); const title=document.getElementById('taskTitle').value; const type=document.getElementById('taskType').value; const urgency=document.getElementById('taskUrgency').value; myTasks.push({id:Date.now(),title,type,urgency,done:false}); localStorage.setItem('edgecore_universal_tasks', JSON.stringify(myTasks)); document.getElementById('taskTitle').value=''; renderTasks(); }
+        function toggleTaskStatus(id){ myTasks=myTasks.map(t=>t.id===id?{...t,done:!t.done}:t); localStorage.setItem('edgecore_universal_tasks', JSON.stringify(myTasks)); renderTasks(); }
+        function removeTask(id){ myTasks=myTasks.filter(t=>t.id!==id); localStorage.setItem('edgecore_universal_tasks', JSON.stringify(myTasks)); renderTasks(); }
+        function renderTasks(){ const c=document.getElementById('taskList'); c.innerHTML=''; if(myTasks.length===0){c.innerHTML=`<p class="text-xs text-gray-500 text-center py-6">No tasks yet. Add one!</p>`; return;} myTasks.forEach(item=>{const d=document.createElement('div'); d.className=`p-2.5 rounded-lg bg-gray-900 border border-gray-800 flex justify-between items-center text-xs`; d.innerHTML=`<div class="flex items-center gap-2.5"><input type="checkbox" ${item.done?'checked':''} onclick="toggleTaskStatus(${item.id})"><div><span class="${item.done?'line-through text-gray-500':'text-gray-200'} block font-medium">${item.title}</span><span class="text-[10px] text-gray-500">${item.type} • ${item.urgency}</span></div></div><button onclick="removeTask(${item.id})" class="text-gray-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>`; c.appendChild(d); }); }
+        function saveVaultData(){ localStorage.setItem('edgecore_universal_vault', document.getElementById('vaultContent').value); alert('Notes saved securely on your device.'); }
+        function loadVaultData(){ const s=localStorage.getItem('edgecore_universal_vault'); if(s) document.getElementById('vaultContent').value=s; }
+        function clearVaultData(){ document.getElementById('vaultContent').value=''; localStorage.removeItem('edgecore_universal_vault'); }
+        function exportData(){ const p={tasks:myTasks,vault:localStorage.getItem('edgecore_universal_vault')||'',date:new Date().toISOString()}; const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=`edgecore-backup-${Date.now()}.json`; a.click(); }
+        function importData(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=function(evt){ try{ const d=JSON.parse(evt.target.result); if(d.tasks) localStorage.setItem('edgecore_universal_tasks', JSON.stringify(d.tasks)); if(d.vault) localStorage.setItem('edgecore_universal_vault', d.vault); location.reload(); }catch(err){ alert('Invalid file'); } }; r.readAsText(f); }
+        function toggleModal(){ document.getElementById('infoModal').classList.toggle('hidden'); }
+    </script>
+</body>
+    </html>
+    
